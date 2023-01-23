@@ -7,10 +7,11 @@ from flask_migrate import Migrate
 from flask_swagger import swagger
 from flask_cors import CORS
 from api.utils import APIException, generate_sitemap
-from api.models import db
+from api.models import db, TokenBlockedList
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_jwt_extended import JWTManager
 
 #from models import Person
 
@@ -18,6 +19,18 @@ ENV = os.getenv("FLASK_ENV")
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+
+#Variable de entorno con la key para JWT
+app.config['JWT_SECRET_KEY']=os.getenv("FLASK_APP_KEY")
+#Iniciar la instancia de jwt
+jwt=JWTManager(app)
+
+#Verificación de tokens bloqueads
+@jwt.token_in_blocklist_loader
+def ckeck_token_revoked(jwt_header, jwt_payload: dict) -> bool:
+    jti = jwt_payload["jti"]
+    token = TokenBlockedList.query.filter(TokenBlockedList.token_id==jti).first()
+    return token is not None
 
 # database condiguration
 db_url = os.getenv("DATABASE_URL")

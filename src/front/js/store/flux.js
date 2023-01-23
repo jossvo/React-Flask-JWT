@@ -1,3 +1,5 @@
+const apiUrl = process.env.BACKEND_URL
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -20,7 +22,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
-
+			login: async (email,password)=>{
+				const resp = await fetch(apiUrl+"/api/login", {
+					method:'POST',
+					headers:{
+						"Content-Type":"application/json"
+					},
+					body:JSON.stringify({email,password})
+				})
+				if(!resp.ok){
+					return resp.statusText
+				}
+				const data = await resp.json()
+				setStore({
+					refreshtoken:data.refreshToken,
+					accestoken: data.accesToken
+				})
+				return "ok"
+			},
 			getMessage: async () => {
 				try{
 					// fetching data from the backend
