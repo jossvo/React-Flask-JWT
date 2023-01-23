@@ -35,10 +35,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				const data = await resp.json()
 				setStore({
-					refreshtoken:data.refreshToken,
-					accestoken: data.accesToken
+					accesToken:data.access_token,
+					refreshtoken: data.refresh_token
 				})
+				localStorage.setItem("accessToken",data.access_token)
+				localStorage.setItem("refreshToken",data.refresh_token)
 				return "ok"
+			},
+			loadTokens:()=>{
+				let accesToken = localStorage.getItem("accessToken")
+				let refreshToken = localStorage.getItem("refreshToken")
+				setStore({accesToken,refreshToken})
+
 			},
 			getMessage: async () => {
 				try{
