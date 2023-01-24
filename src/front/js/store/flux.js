@@ -44,11 +44,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getAutorizationHeader:()=>{
 				let temp = getStore()
-				console.log(temp.accessToken)
 				return {"Authorization":"Bearer " + temp.accessToken}
-				// let token = localStorage.getItem("accessToken")
-				// console.log(token)
-				// return {"Authorization":"Bearer " + token}
 			},
 			loadTokens:()=>{
 				let accessToken = localStorage.getItem("accessToken")
@@ -57,11 +53,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			},
 			logout:async ()=>{
-				// localStorage.removeItem("accessToken")
-				// localStorage.removeItem("refreshToken")
-				// let store = getStore()
-				// console.log(localStorage.getItem("accessToken"))
-				console.log({...getActions().getAutorizationHeader()})
 				if(!getStore().accessToken)return;
 				const resp = await fetch(apiUrl+"/api/logout",{
 					method: 'POST',
@@ -81,7 +72,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getProfile: async()=>{
 				const resp = await fetch(apiUrl+"/api/userinfo",{
 					headers:{
-						//"Authorization":"Bearer " + localStorage.getItem("accessToken")
 						...getActions().getAutorizationHeader()
 					}
 				})

@@ -23,10 +23,6 @@ export const Logout = () => {
     <div className="container">
       <h1>Cierre de sesión</h1>
       <p>{message}</p>
-      <br />
-      <Link to="/">
-        <button className="btn btn-primary">Back home</button>
-      </Link>
     </div>
   );
 };

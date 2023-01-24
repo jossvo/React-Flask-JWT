@@ -15,15 +15,13 @@ export const Perfil = () => {
 			return;
 		}
 		actions.getProfile().then(data=>{
-			console.log(data)
 			setUserInfo(data)
 		})
-		//console.log(userInfo)
 	},[store.accessToken])
 
 	return (
 		<div className="container">
-			<h1>{}</h1>
+			<h1>User id: {userInfo?.id}</h1>
 			<ul className="list-group"></ul>
 			<br />
 			<Link to="/">
