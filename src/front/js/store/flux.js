@@ -35,18 +35,61 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				const data = await resp.json()
 				setStore({
-					accesToken:data.access_token,
-					refreshtoken: data.refresh_token
+					accessToken:data.access_token,
+					refreshToken: data.refresh_token
 				})
 				localStorage.setItem("accessToken",data.access_token)
 				localStorage.setItem("refreshToken",data.refresh_token)
 				return "ok"
 			},
+			getAutorizationHeader:()=>{
+				let temp = getStore()
+				console.log(temp.accessToken)
+				return {"Authorization":"Bearer " + temp.accessToken}
+				// let token = localStorage.getItem("accessToken")
+				// console.log(token)
+				// return {"Authorization":"Bearer " + token}
+			},
 			loadTokens:()=>{
-				let accesToken = localStorage.getItem("accessToken")
+				let accessToken = localStorage.getItem("accessToken")
 				let refreshToken = localStorage.getItem("refreshToken")
-				setStore({accesToken,refreshToken})
+				setStore({accessToken,refreshToken})
 
+			},
+			logout:async ()=>{
+				// localStorage.removeItem("accessToken")
+				// localStorage.removeItem("refreshToken")
+				// let store = getStore()
+				// console.log(localStorage.getItem("accessToken"))
+				console.log({...getActions().getAutorizationHeader()})
+				if(!getStore().accessToken)return;
+				const resp = await fetch(apiUrl+"/api/logout",{
+					method: 'POST',
+					headers: {
+						...getActions().getAutorizationHeader()
+					}
+				})
+				if(!resp.ok){
+					console.error(resp.statusText)
+					return false
+				}
+				localStorage.removeItem("accessToken")
+				localStorage.removeItem("refreshToken")
+				setStore({accessToken:null,refreshToken:null})
+				return "ok"
+			},
+			getProfile: async()=>{
+				const resp = await fetch(apiUrl+"/api/userinfo",{
+					headers:{
+						//"Authorization":"Bearer " + localStorage.getItem("accessToken")
+						...getActions().getAutorizationHeader()
+					}
+				})
+				if(!resp.ok){
+					console.error(resp.statusText)
+				}
+				let data = await resp.json()
+				return data
 			},
 			getMessage: async () => {
 				try{

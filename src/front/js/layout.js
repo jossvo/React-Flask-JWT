@@ -3,7 +3,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 
 import { Home } from "./pages/home.jsx";
-import { Demo } from "./pages/demo";
+import { Logout } from "./pages/logout.jsx";
+import { Perfil } from "./pages/perfil.jsx";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
@@ -23,7 +24,8 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         <Route element={<Home />} path="/" />
-                        <Route element={<Demo />} path="/demo" />
+                        <Route element={<Logout />} path="/logout" />
+                        <Route element={<Perfil />} path="/perfil" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>

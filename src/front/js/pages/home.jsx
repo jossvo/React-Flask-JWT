@@ -1,10 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect} from "react";
+import {useNavigate} from "react-router-dom"
 import { Context } from "../store/appContext";
 import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
+	const navigate = useNavigate()
+	useEffect(()=>{
+		if(store.accessToken){
+			navigate("/perfil")
+		}
+	},[store.accessToken])
 
 	async function submitlogin(e){
 		e.preventDefault()
@@ -25,17 +32,17 @@ export const Home = () => {
 			<h1>Login</h1>
 			<form onSubmit={submitlogin}>
 				<div className="mb-3">
-					<label for="exampleInputEmail1" className="form-label">Email address</label>
+					<label className="form-label">Email address</label>
 					<input type="email" className="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp"/>
 					<div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
 				</div>
 				<div className="mb-3">
-					<label for="exampleInputPassword1" className="form-label">Password</label>
+					<label className="form-label">Password</label>
 					<input type="password" className="form-control" id="exampleInputPassword1" name="password"/>
 				</div>
 				<div className="mb-3 form-check">
 					<input type="checkbox" className="form-check-input" id="exampleCheck1"/>
-					<label className="form-check-label" for="exampleCheck1">Check me out</label>
+					<label className="form-check-label" >Check me out</label>
 				</div>
 				<button type="submit" className="btn btn-primary">Submit</button>
 			</form>

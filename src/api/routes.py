@@ -61,7 +61,7 @@ def user_logout():
     token_blocked=TokenBlockedList(token_id=jti)
     db.session.add(token_blocked)
     db.session.commit()
-    return jsonify({"msg":"UserBlockeds"})
+    return jsonify({"msg":"User logged out"})
 
 @api.route('/userinfo')
 @jwt_required()
